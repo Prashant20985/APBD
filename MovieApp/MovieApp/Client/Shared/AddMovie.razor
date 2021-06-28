@@ -1,0 +1,110 @@
+﻿@page "/AddMovie"
+
+<EditForm Model="@Movie" OnInvalidSubmit="onValidSubmit">
+    <h1>New Movie</h1>
+    <hr />
+    <div class="form-group row">
+        <label for="Title" class="col-sm-2 col-form-label">
+            Title
+        </label>
+        <div class="col-sm-10">
+            <InputText class="form-control" Id="Title" placeholder="Title"
+                       @bind-Value="Movie.Title">
+                <ValidationMessage For="@(()=> Movie.Title)" />
+            </InputText>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label for="ReleaseDate" class="col-sm-2 col-form-label">
+            Release Date
+        </label>
+        <div class="col-sm-10">
+            <InputDate class="form-control" Id="ReleaseDate" placeholder="ReleaseDate"
+                       @bind-Value="Movie.ReleaseDate">
+                <ValidationMessage For="@(()=> Movie.ReleaseDate)" />
+            </InputDate>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label for="Summary" class="col-sm-2 col-form-label">
+            Summary
+        </label>
+        <div class="col-sm-10">
+            <InputText class="form-control" Id="Summary" placeholder="Summary"
+                       @bind-Value="Movie.Summary">
+                <ValidationMessage For="@(()=> Movie.Summary)" />
+            </InputText>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label for="InTheaters" class="col-sm-2 col-form-label">
+            In Theaters
+        </label>
+        <div class="col">
+            <InputCheckbox class="form-control" Id="InTheaters" placeholder="InTheaters"
+                           @bind-Value="Movie.InTheaters">
+                <ValidationMessage For="@(()=> Movie.InTheaters)" />
+            </InputCheckbox>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label for="Poster" class="col-sm-2 col-form-label">
+            Poster
+        </label>
+        <div class="col-sm-10">
+            <InputText class="form-control" Id="Poster" placeholder="Poster"
+                       @bind-Value="Movie.Poster">
+                <ValidationMessage For="@(()=> Movie.Poster)" />
+            </InputText>
+            <img src="@Movie.Poster" class="oi-move" style="padding:10px" width="200">
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label for="Trailer" class="col-sm-2 col-form-label">
+            Trailer
+        </label>
+        <div class="col-sm-10">
+            <InputText class="form-control" Id="Trailer" placeholder="Trailer"
+                       @bind-Value="Movie.Trailer">
+                <ValidationMessage For="@(()=> Movie.Trailer)" />
+            </InputText>
+        </div>
+    </div>
+
+    <button class="btn btn-success" type="submit">Submit</button>
+    <a class="btn btn-secondary" href="/movies">Return</a>
+
+</EditForm>
+
+@code {
+    public Movie Movie { get; set; } = new Movie();
+    [Inject]
+    public IMoviesRepository moviesRepository { get; set; }
+    [Inject]
+    public NavigationManager navigation { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        await onValidSubmit();
+    }
+
+
+    protected Task onValidSubmit()
+    {
+        var result = moviesRepository.AddMovie(Movie);
+
+        if (result != null)
+        {
+            navigation.NavigateTo("/movies");
+        }
+        return result;
+
+    }
+
+}
+

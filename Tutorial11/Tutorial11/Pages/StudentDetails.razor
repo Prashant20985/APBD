@@ -1,0 +1,44 @@
+﻿@page "/details/{FirstName}"
+@inherits StudentBase
+
+<h1><u>Student Details</u></h1>
+
+@if (Student == null)
+{
+    <p>No Students!</p>
+    <button class="btn btn-primary" href="/students"> Return </button>
+}
+
+else
+{
+        <div class="row justify-content-around m-3">
+            <div class="col-sm-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h1> @Student.FirstName @Student.LastName</h1>
+                    </div>
+                    <div class="card-body text-center">
+                        <img class="card-img-top" src="@Student.Avatar" />
+                        <h4>Studies: @Student.Studies</h4>
+                        <h4>BirthDate: @Student.Birthdate</h4>
+                    </div>
+                    <div class="card-footer text-center">
+                        <a href="/students" class="btn btn-primary">BACK</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+
+
+@code{
+    [Parameter] public string FirstName { get; set; }
+
+    [Parameter] public Student Student { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Student = students.FirstOrDefault(x => x.FirstName == FirstName);
+    }
+}

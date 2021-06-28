@@ -1,0 +1,71 @@
+﻿@page "/newStudent"
+@using Tutorial11.Models
+@inherits StudentBase
+
+<EditForm Model="student" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <div class="form-group">
+        <label>Avatar:</label>
+        <div>
+           <InputText class="form-control" @bind-Value="@student.Avatar" />
+        </div>
+        <div>
+            <img class="card-deck" src="@student.Avatar"/>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>FirstName:</label>
+        <div>
+            <InputText class="form-control" @bind-Value="@student.FirstName" />
+            <ValidationMessage For="@(() => student.FirstName)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>LastName:</label>
+        <div>
+            <InputText class="form-control" @bind-Value="@student.LastName" />
+            <ValidationMessage For="@(() => student.LastName)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Birthdate:</label>
+        <div>
+            <InputDate class="form-control" @bind-Value="@student.Birthdate" />
+            <ValidationMessage For="@(() => student.Birthdate)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Studies:</label>
+        <div>
+            <InputSelect class="form-control" @bind-Value="@student.Studies">
+                <option value="">--SELECT--</option>
+                <option value="Information Technology">Information Technology</option>
+                <option value="Gastronomy">Gastronomy</option>
+                <option value="MBA">MBA</option>
+                <option value="Economics">Economics</option>
+                <option value="Medical">Medical</option>
+                <option value="History">History</option>
+                <option value="Geogrophy">Geography</option>
+            </InputSelect>
+            <ValidationMessage For="@(() => student.Studies)" />    
+        </div>
+    </div>
+
+    <button class="btn btn-success" type="submit">Save Changes</button>
+    <button class="btn btn-primary" href="/students" > Return </button>
+</EditForm>
+
+@code {
+    [Parameter]
+    public Student student { get; set; }
+
+    private void OnValidSubmit()
+    {
+        students.Add(student);
+    }
+
+}

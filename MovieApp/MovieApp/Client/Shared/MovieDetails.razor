@@ -1,0 +1,37 @@
+﻿@page "/movie/{Id}"
+
+<h3>MovieDetails</h3>
+<hr />
+<div>
+    <h4>@Movie.Title</h4>
+
+</div>
+<hr />
+<div>
+    <img src="@Movie.Poster" style="padding:10px" width="300"/>
+</div>
+<hr />
+<div>
+    <p>Movie in theaters: @Movie.InTheaters</p>
+    <p>Movie Summary: @Movie.Summary</p>
+    <p>Trailer: @Movie.Trailer</p>
+    <iframe width="470" height="240" src="@Movie.Trailer" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+     <p>Release Date: @Movie.ReleaseDate</p>
+    <div><a class="btn btn-primary" href="/movies">Return</a></div>
+</div>
+
+
+@code {
+    public Movie Movie { get; set; } = new Movie();
+    [Inject]
+    public IMoviesRepository moviesRepository { get; set; }
+
+    [Parameter]
+    public String Id{ get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        Movie = await moviesRepository.GetMovie(int.Parse(Id));
+    }
+
+}

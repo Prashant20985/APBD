@@ -1,0 +1,77 @@
+﻿@page "/students"
+@inherits StudentBase
+@inject IJSRuntime JsRuntime
+
+<h1>Student</h1>
+<a class="btn btn-primary" href="/newStudent">New Student </a>
+<style>
+    .sort-th {
+        cursor: pointer;
+    }
+
+    .fa {
+        float: right;
+    }
+</style>
+
+
+@if (students == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class='table table-bordered table-hover'>
+        <thead>
+            <tr>
+                <th class="img-thumbnail">Avatar</th>
+                <th class="sort-th" @onclick="@(() => SortTable("FirstName"))">
+                    FirstName
+                    <span class="fa @(SetSortIcon("FirstName"))"></span>
+                </th>
+                <th>Last Name</th>
+                <th>BirthDate</th>
+                <th>Studies</th>
+                <th>ACTION</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in students)
+            {
+                <tr>
+                    <td><img class="card-img-top" src="@item.Avatar" asp-append-version="true" sizes="300px,300px" /></td>
+                    <td>@item.FirstName</td>
+                    <td>@item.LastName</td>
+                    <td>@item.Birthdate</td>
+                    <td>@item.Studies</td>
+                    <td>
+                        <a class="btn btn-info" href="/details/@item.FirstName">View</a> |
+                        <a @onclick="@(()=>Delete(item.FirstName))" class="btn btn-danger"> Delete </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code
+{
+    
+    public async Task<Student> Delete(string FirstName)
+    {
+        var result = students.FirstOrDefault(x => x.FirstName == FirstName);
+
+        if (result == null)
+        {
+            Console.WriteLine("Student Doesnt Exists!");
+            return null;
+        }
+        bool confirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Are you sure?");
+        if (confirmed)
+        {
+            students.Remove(result);
+        }
+
+        return result;
+    }
+}
